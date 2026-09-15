@@ -45,17 +45,19 @@ jobs:
     - name: Install Docker
       uses: docker-practice/actions-setup-docker@v1
       with:
-        docker_version: '24.04'
+        docker_version: '24.0'
 
     - name: Build Docker image
       run: docker build -f Dockerfile -t myapp:latest .
 
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
     - name: Docker scout scan
       run: |
         curl -sSfL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh -s --
-        echo ${{secrets.DOCKER_PWD}} | docker login -u ${{secrets.DOCKER_USER}} --password-stdin
-        docker scout quickview
-        docker scout cves
+        docker scout quickview myapp:latest
+        docker scout cves myapp:latest --output scout-report.sarif
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v7.0.1
@@ -63,7 +65,6 @@ jobs:
       with:
         name: Scout findings
         path: scout-report.sarif
-    
   
    
         
