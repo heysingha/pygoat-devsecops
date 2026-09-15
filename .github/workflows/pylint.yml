@@ -40,7 +40,7 @@ jobs:
     - name: Install Docker
       uses: docker-practice/actions-setup-docker@v1
       with:
-        docker_version: "24.04"
+        docker_version: '24.04'
 
     - name: Build Docker image
       run: docker build -f Dockerfile -t myapp:latest .
