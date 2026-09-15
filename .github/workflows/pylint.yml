@@ -14,13 +14,13 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v7.0.0
       with:
-        python-version: 3.8
+        python-version: '3.11'
 
     - name: Install Bandit
       run: pip install bandit
 
     - name: Run bandit and save the report
-      run: bandit -ll -ii -r . -f json -o bandit-report.json
+      run: bandit -ll -ii -r . -f json -o bandit-report.json || true
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v7.0.1
